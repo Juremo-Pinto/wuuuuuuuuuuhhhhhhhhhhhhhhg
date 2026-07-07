@@ -69,13 +69,13 @@ app.post('/login', (req, res) => {
     const usuario = req.body.usuario;
     const senha = req.body.senha;
 
-    for (let i = 0; i < usuario.length; i++) {
+    for (let i = 0; i < usuarios.length; i++) {
         if (usuario === usuarios[i].usuario && senha === usuarios[i].senha) {
-            res.status(200).json({ mensagem: 'Login realizado com sucesso!' });
             usuarioAutenticado = true;
+            return res.status(200).json({ mensagem: 'Login realizado com sucesso!' });
         }
     }
-    if(!usuarioAutenticado) res.status(401).json({ erro: 'Usuário ou senha incorretos.' });
+    if (!usuarioAutenticado) res.status(401).json({ erro: 'Usuário ou senha incorretos.' });
 });
 
 function buscarLivro(id) {
@@ -153,6 +153,69 @@ app.post('/devolucao', (req, res) => {
         livro: livro.nome,
     });
     livro.aluno = '-';
+});
+
+app.delete('/livros/:id', (req, res) => {
+    if (!usuarioAutenticado) {
+        return res.status(401).json({ erro: 'Usuário conectado não tem autorização para essa ação.' });
+    }
+
+    const id = parseInt(req.params.id);
+
+    const indice = livros.findIndex(l => l.id === id);
+
+    if (indice === -1) {
+        return res.status(404).json({ erro: 'Livro não encontrado.' });
+    }
+
+    if (!livros[indice].disponibilidade) {
+        return res.status(400).json({ erro: 'Não é possível excluir um livro emprestado.' });
+    }
+
+    livros.splice(indice, 1);
+
+    res.status(200).json({
+        mensagem: 'Livro removido com sucesso.'
+    });
+})
+
+app.post('/livros', (req, res) => {
+    if (!usuarioAutenticado) {
+        return res.status(401).json({ erro: 'Usuário conectado não tem autorização para essa ação.' });
+    }
+
+    const { nome, genero } = req.body;
+
+    if (!nome || !genero) {
+        return res.status(400).json({ erro: 'Envie nome e gênero.' });
+    }
+
+    let maiorId = 0;
+
+    for (let i = 0; i < livros.length; i++) {
+        if (livros[i].id > maiorId) {
+            maiorId = livros[i].id;
+        }
+    }
+    // fiz pegar o maiorId ao invés do primeiro id disponivel
+    // pq é tecnicamente um banco de dados entao é importante ids que foram deletados ficarem marcados
+    // ao invés de substituir encima :p
+
+    const novoLivro = {
+        id: maiorId + 1,
+        nome,
+        genero,
+        disponibilidade: true,
+        aluno: '-'
+    };
+
+    livros.push(novoLivro);
+
+    res.status(201).json({
+        mensagem: 'Livro cadastrado com sucesso.',
+        livro: novoLivro
+    });
+
 });
 
 app.listen(3001, () => {

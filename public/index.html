@@ -238,6 +238,42 @@
 
         </div>
 
+        <div class="grid">
+
+            <div class="card">
+
+                <h2>Adicionar Livro</h2>
+
+                <input id="novoNome" placeholder="Nome do livro">
+
+                <select id="novoGenero">
+                    <option value="manga">Mangá</option>
+                    <option value="ficcao">Ficção</option>
+                    <option value="fantasia">Fantasia</option>
+                    <option value="cientifico">Científico</option>
+                    <option value="terror">Terror</option>
+                </select>
+
+                <button onclick="adicionarLivro()">
+                    Adicionar
+                </button>
+
+            </div>
+
+            <div class="card">
+
+                <h2>Excluir Livro</h2>
+
+                <input id="excluirID" type="number" placeholder="ID do livro">
+
+                <button onclick="excluirLivro()">
+                    Excluir
+                </button>
+
+            </div>
+
+        </div>
+
         <div id="mensagem"></div>
 
     </div>
@@ -397,6 +433,52 @@
 
                 })
 
+            });
+
+            const dados = await resposta.json();
+
+            document.getElementById("mensagem").innerText =
+                dados.mensagem || dados.erro;
+
+            listarLivros();
+
+        }
+
+        async function adicionarLivro() {
+
+            const nome = document.getElementById("novoNome").value;
+            const genero = document.getElementById("novoGenero").value;
+
+            const resposta = await fetch("/livros", {
+
+                method: "POST",
+
+                headers: {
+                    "Content-Type": "application/json"
+                },
+
+                body: JSON.stringify({
+                    nome,
+                    genero
+                })
+
+            });
+
+            const dados = await resposta.json();
+
+            document.getElementById("mensagem").innerText =
+                dados.mensagem || dados.erro;
+
+            listarLivros();
+
+        }
+
+        async function excluirLivro() {
+
+            const id = parseInt(document.getElementById("excluirID").value);
+
+            const resposta = await fetch("/livros/" + id, {
+                method: "DELETE"
             });
 
             const dados = await resposta.json();
