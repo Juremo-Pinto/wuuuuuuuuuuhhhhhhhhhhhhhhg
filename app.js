@@ -32,8 +32,10 @@ const livros = [
     { id: 24, nome: 'A Assombração da Casa da Colina', genero: 'terror', disponibilidade: true, aluno: '-' }
 ];
 
-const USUARIO_PADRAO = 'admin';
-const SENHA_PADRAO = 'etefmc123';
+const usuarios = [
+    { usuario: 'admin', senha: 'etefmc123' },
+    { usuario: 'daniel.mosca', senha: '34ds' },
+]
 
 app.get('/', (req, res) => {
     res.sendFile(__dirname + '/public/index.html');
@@ -49,7 +51,7 @@ app.get('/livros', (req, res) => {
 
         const livro = livros[i];
 
-        const correspondeGenero = 
+        const correspondeGenero =
             !genero || livro.genero === genero;
 
         const correspondeNome =
@@ -67,13 +69,13 @@ app.post('/login', (req, res) => {
     const usuario = req.body.usuario;
     const senha = req.body.senha;
 
-    if (usuario === USUARIO_PADRAO && senha === SENHA_PADRAO) {
-        res.status(200).json({ mensagem: 'Login realizado com sucesso!' });
-    } else {
-        res.status(401).json({ erro: 'Usuário ou senha incorretos.' });
+    for (let i = 0; i < usuario.length; i++) {
+        if (usuario === usuarios[i].usuario && senha === usuarios[i].senha) {
+            res.status(200).json({ mensagem: 'Login realizado com sucesso!' });
+            usuarioAutenticado = true;
+        }
     }
-
-    usuarioAutenticado = true;
+    if(!usuarioAutenticado) res.status(401).json({ erro: 'Usuário ou senha incorretos.' });
 });
 
 function buscarLivro(id) {
