@@ -170,7 +170,7 @@
 
                 <h2>Pesquisar Livros</h2>
 
-                <select id="genero">
+                <select id="genero" onchange="listarLivros()">
                     <option value="">Todos</option>
                     <option value="manga">Mangá</option>
                     <option value="ficcao">Ficção</option>
@@ -179,8 +179,7 @@
                     <option value="terror">Terror</option>
                 </select>
 
-                <button onclick="listarLivros()">Pesquisar</button>
-
+                <input type="text" id="buscaNome" placeholder="Pesquisar por nome do livro" oninput="pesquisarLivro()">
             </div>
 
         </div>
@@ -244,6 +243,13 @@
     </div>
 
     <script>
+        const nomesGeneros = {
+            manga: "Mangá",
+            ficcao: "Ficção",
+            fantasia: "Fantasia",
+            cientifico: "Científico",
+            terror: "Terror"
+        };
 
         async function login() {
 
@@ -272,14 +278,35 @@
 
         }
 
+        let tempoBusca;
+
+        function pesquisarLivro() {
+
+            clearTimeout(tempoBusca);
+
+            tempoBusca = setTimeout(() => {
+                listarLivros();
+            }, 300);
+
+        }
+
         async function listarLivros() {
 
             const genero = document.getElementById("genero").value;
+            const nome = document.getElementById("buscaNome").value;
 
             let url = "/livros";
 
+            const parametros = [];
+
             if (genero != "")
-                url += "?genero=" + genero;
+                parametros.push("genero=" + encodeURIComponent(genero));
+
+            if (nome != "")
+                parametros.push("nome=" + encodeURIComponent(nome));
+
+            if (parametros.length > 0)
+                url += "?" + parametros.join("&");
 
             const resposta = await fetch(url);
 
@@ -304,7 +331,7 @@
             <td>${l.id}</td>
             <td>${l.aluno}</td>
             <td>${l.nome}</td>
-            <td>${l.genero}</td>
+            <td>${nomesGeneros[l.genero]}</td>
             <td>${l.disponibilidade ? "🟢 Disponível" : "🔴 Emprestado"}</td>
         </tr>
         `;

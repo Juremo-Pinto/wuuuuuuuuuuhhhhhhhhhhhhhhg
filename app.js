@@ -41,15 +41,22 @@ app.get('/', (req, res) => {
 
 app.get('/livros', (req, res) => {
     const genero = req.query.genero;
-
-    if (!genero) {
-        return res.status(200).json(livros);
-    }
+    const nome = req.query.nome;
 
     const filtrados = [];
+
     for (let i = 0; i < livros.length; i++) {
-        if (livros[i].genero === genero) {
-            filtrados.push(livros[i]);
+
+        const livro = livros[i];
+
+        const correspondeGenero = 
+            !genero || livro.genero === genero;
+
+        const correspondeNome =
+            !nome || livro.nome.toLowerCase().includes(nome.toLowerCase());
+
+        if (correspondeGenero && correspondeNome) {
+            filtrados.push(livro);
         }
     }
 
