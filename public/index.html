@@ -196,6 +196,7 @@
                     <thead>
                         <tr>
                             <th style="width:70px;">ID</th>
+                            <th style="width:120px;">Leitor</th>
                             <th>Livro</th>
                             <th style="width:160px;">Gênero</th>
                             <th style="width:180px;">Status</th>
@@ -301,6 +302,7 @@
                 html += `
         <tr>
             <td>${l.id}</td>
+            <td>${l.aluno}</td>
             <td>${l.nome}</td>
             <td>${l.genero}</td>
             <td>${l.disponibilidade ? "🟢 Disponível" : "🔴 Emprestado"}</td>
