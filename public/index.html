@@ -5,347 +5,384 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Biblioteca Online - ETEFMC</title>
-
     <style>
-        *{
-            margin:0;
-            padding:0;
-            box-sizing:border-box;
-            font-family:Segoe UI,Arial,sans-serif;
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Segoe UI, Arial, sans-serif;
         }
 
-        body{
-            background:linear-gradient(135deg,#8ff7ff,#44d7e8,#0f7fa8);
-            min-height:100vh;
-            color:white;
+        body {
+            background: linear-gradient(135deg, #8ff7ff, #44d7e8, #0f7fa8);
+            min-height: 100vh;
+            color: rgb(0, 99, 69);
         }
 
-        header{
-            background:#1fced8;
-            padding:25px;
-            text-align:center;
-            box-shadow:0 0 20px rgba(0,0,0,.3);
+        header {
+            background: #1fced8;
+            padding: 25px;
+            text-align: center;
+            box-shadow: 0 0 20px rgba(0, 0, 0, .3);
         }
 
-        header h1{
-            font-size:2.3em;
+        header h1 {
+            font-size: 2.3em;
         }
 
-        header p{
-            margin-top:5px;
-            opacity:.9;
+        header p {
+            margin-top: 5px;
+            opacity: .9;
         }
 
-        .container{
-            width:90%;
-            max-width:1200px;
-            margin:auto;
-            padding:30px;
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: auto;
+            padding: 30px;
         }
 
-        .card{
-            background:rgba(255,255,255,.15);
-            backdrop-filter:blur(10px);
-            border-radius:15px;
-            padding:20px;
-            margin-bottom:25px;
-            box-shadow:0 10px 20px rgba(0,0,0,.2);
+        .card {
+            background: rgba(255, 255, 255, .15);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 25px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, .2);
         }
 
-        h2{
-            margin-bottom:15px;
+        h2 {
+            margin-bottom: 15px;
         }
 
-        input,select{
-            width:100%;
-            padding:12px;
-            margin:8px 0;
-            border:none;
-            border-radius:8px;
-            font-size:16px;
+        input,
+        select {
+            width: 100%;
+            padding: 12px;
+            margin: 8px 0;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
         }
 
-        button{
-            background:#00c8d7;
-            color:white;
-            border:none;
-            padding:12px 20px;
-            margin-top:10px;
-            border-radius:8px;
-            cursor:pointer;
-            font-size:16px;
-            transition:.3s;
+        button {
+            background: #00c8d7;
+            color: rgb(0, 46, 32);
+            border: none;
+            padding: 12px 20px;
+            margin-top: 10px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: .3s;
         }
 
-        button:hover{
-            background:#00a3b0;
-            transform:scale(1.03);
+        button:hover {
+            background: #00a3b0;
+            transform: scale(1.03);
         }
 
-        table{
-            width:100%;
-            border-collapse:collapse;
-            margin-top:15px;
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
         }
 
-        th{
-            background:#00b6c9;
-            padding:12px;
+        th {
+            background: #00b6c9;
+            padding: 12px;
         }
 
-        td{
-            background:rgba(255,255,255,.1);
-            padding:10px;
-            text-align:center;
+        td {
+            background: rgba(255, 255, 255, .1);
+            padding: 10px;
+            text-align: center;
         }
 
-        tr:hover td{
-            background:rgba(255,255,255,.2);
+        tr:hover td {
+            background: rgba(255, 255, 255, .2);
         }
 
-        #mensagem{
-            margin-top:20px;
-            font-size:18px;
-            font-weight:bold;
+        #mensagem {
+            margin-top: 20px;
+            font-size: 18px;
+            font-weight: bold;
         }
 
-        .grid{
-            display:grid;
-            grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
-            gap:20px;
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .lista-livros {
+            max-height: 420px;
+            overflow-y: auto;
+            border-radius: 10px;
+        }
+
+        .lista-livros::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        .lista-livros::-webkit-scrollbar-thumb {
+            background: #00b6c9;
+            border-radius: 10px;
+        }
+
+        .lista-livros::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, .08);
+        }
+
+        thead th {
+            position: sticky;
+            top: 0;
+            background: #00b6c9;
+            z-index: 2;
         }
     </style>
 </head>
 
 <body>
 
-<header>
-    <h1>📚 Biblioteca Online ETEFMC</h1>
-    <p>Tema Hatsune Miku</p>
-</header>
+    <header>
+        <h1>📚 Biblioteca Online ETEFMC</h1>
 
-<div class="container">
+    </header>
 
-    <div class="grid">
+    <div class="container">
 
-        <div class="card">
+        <div class="grid">
 
-            <h2>Login</h2>
+            <div class="card">
 
-            <input type="text" id="usuario" placeholder="Usuário">
+                <h2>Login</h2>
 
-            <input type="password" id="senha" placeholder="Senha">
+                <input type="text" id="usuario" placeholder="Usuário">
 
-            <button onclick="login()">Entrar</button>
+                <input type="password" id="senha" placeholder="Senha">
+
+                <button onclick="login()">Entrar</button>
+
+            </div>
+
+            <div class="card">
+
+                <h2>Pesquisar Livros</h2>
+
+                <select id="genero">
+                    <option value="">Todos</option>
+                    <option value="manga">Mangá</option>
+                    <option value="ficcao">Ficção</option>
+                    <option value="fantasia">Fantasia</option>
+                    <option value="cientifico">Científico</option>
+                    <option value="terror">Terror</option>
+                </select>
+
+                <button onclick="listarLivros()">Pesquisar</button>
+
+            </div>
 
         </div>
 
         <div class="card">
 
-            <h2>Pesquisar Livros</h2>
+            <h2>Livros</h2>
 
-            <select id="genero">
-                <option value="">Todos</option>
-                <option value="manga">Mangá</option>
-                <option value="ficcao">Ficção</option>
-                <option value="fantasia">Fantasia</option>
-                <option value="cientifico">Científico</option>
-                <option value="terror">Terror</option>
-            </select>
+            <div class="lista-livros">
 
-            <button onclick="listarLivros()">Pesquisar</button>
+                <table>
+
+                    <thead>
+                        <tr>
+                            <th style="width:70px;">ID</th>
+                            <th>Livro</th>
+                            <th style="width:160px;">Gênero</th>
+                            <th style="width:180px;">Status</th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="livros"></tbody>
+
+                </table>
+
+            </div>
 
         </div>
+
+        <div class="grid">
+
+            <div class="card">
+
+                <h2>Empréstimo</h2>
+
+                <input id="empID" type="number" placeholder="ID do livro">
+
+                <input id="empAluno" placeholder="Nome do aluno">
+
+                <button onclick="emprestar()">Emprestar</button>
+
+            </div>
+
+            <div class="card">
+
+                <h2>Devolução</h2>
+
+                <input id="devID" type="number" placeholder="ID do livro">
+
+                <input id="devAluno" placeholder="Nome do aluno">
+
+                <button onclick="devolver()">Devolver</button>
+
+            </div>
+
+        </div>
+
+        <div id="mensagem"></div>
 
     </div>
 
-    <div class="card">
+    <script>
 
-        <h2>Livros</h2>
+        async function login() {
 
-        <table>
+            const usuario = document.getElementById("usuario").value;
+            const senha = document.getElementById("senha").value;
 
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Livro</th>
-                    <th>Gênero</th>
-                    <th>Status</th>
-                </tr>
-            </thead>
+            const resposta = await fetch("/login", {
 
-            <tbody id="livros"></tbody>
+                method: "POST",
 
-        </table>
+                headers: {
+                    "Content-Type": "application/json"
+                },
 
-    </div>
+                body: JSON.stringify({
+                    usuario,
+                    senha
+                })
 
-    <div class="grid">
+            });
 
-        <div class="card">
+            const dados = await resposta.json();
 
-            <h2>Empréstimo</h2>
+            document.getElementById("mensagem").innerText =
+                dados.mensagem || dados.erro;
 
-            <input id="empID" type="number" placeholder="ID do livro">
+        }
 
-            <input id="empAluno" placeholder="Nome do aluno">
+        async function listarLivros() {
 
-            <button onclick="emprestar()">Emprestar</button>
+            const genero = document.getElementById("genero").value;
 
-        </div>
+            let url = "/livros";
 
-        <div class="card">
+            if (genero != "")
+                url += "?genero=" + genero;
 
-            <h2>Devolução</h2>
+            const resposta = await fetch(url);
 
-            <input id="devID" type="number" placeholder="ID do livro">
+            const livros = await resposta.json();
 
-            <input id="devAluno" placeholder="Nome do aluno">
+            livros.sort((a, b) => {
 
-            <button onclick="devolver()">Devolver</button>
+                if (a.disponibilidade !== b.disponibilidade) {
+                    return b.disponibilidade - a.disponibilidade;
+                }
 
-        </div>
+                return a.nome.localeCompare(b.nome);
 
-    </div>
+            });
 
-    <div id="mensagem"></div>
+            let html = "";
 
-</div>
+            livros.forEach(l => {
 
-<script>
-
-async function login(){
-
-    const usuario=document.getElementById("usuario").value;
-    const senha=document.getElementById("senha").value;
-
-    const resposta=await fetch("/login",{
-
-        method:"POST",
-
-        headers:{
-            "Content-Type":"application/json"
-        },
-
-        body:JSON.stringify({
-            usuario,
-            senha
-        })
-
-    });
-
-    const dados=await resposta.json();
-
-    document.getElementById("mensagem").innerText=
-        dados.mensagem || dados.erro;
-
-}
-
-async function listarLivros(){
-
-    const genero=document.getElementById("genero").value;
-
-    let url="/livros";
-
-    if(genero!="")
-        url+="?genero="+genero;
-
-    const resposta=await fetch(url);
-
-    const livros=await resposta.json();
-
-    let html="";
-
-    livros.forEach(l=>{
-
-        html+=`
+                html += `
         <tr>
             <td>${l.id}</td>
             <td>${l.nome}</td>
             <td>${l.genero}</td>
-            <td>${l.disponibilidade ? "🟢 Disponível":"🔴 Emprestado"}</td>
+            <td>${l.disponibilidade ? "🟢 Disponível" : "🔴 Emprestado"}</td>
         </tr>
         `;
 
-    });
+            });
 
-    document.getElementById("livros").innerHTML=html;
+            document.getElementById("livros").innerHTML = html;
 
-}
+        }
 
-async function emprestar(){
+        async function emprestar() {
 
-    const id=parseInt(document.getElementById("empID").value);
+            const id = parseInt(document.getElementById("empID").value);
 
-    const aluno=document.getElementById("empAluno").value;
+            const aluno = document.getElementById("empAluno").value;
 
-    const resposta=await fetch("/emprestimo",{
+            const resposta = await fetch("/emprestimo", {
 
-        method:"POST",
+                method: "POST",
 
-        headers:{
-            "Content-Type":"application/json"
-        },
+                headers: {
+                    "Content-Type": "application/json"
+                },
 
-        body:JSON.stringify({
+                body: JSON.stringify({
 
-            id:id,
+                    id: id,
 
-            disponibilidade:true,
+                    aluno: aluno
 
-            aluno:aluno
+                })
 
-        })
+            });
 
-    });
+            const dados = await resposta.json();
 
-    const dados=await resposta.json();
+            document.getElementById("mensagem").innerText =
+                dados.mensagem || dados.erro;
 
-    document.getElementById("mensagem").innerText=
-        dados.mensagem || dados.erro;
+            listarLivros();
 
-    listarLivros();
+        }
 
-}
+        async function devolver() {
 
-async function devolver(){
+            const id = parseInt(document.getElementById("devID").value);
 
-    const id=parseInt(document.getElementById("devID").value);
+            const aluno = document.getElementById("devAluno").value;
 
-    const aluno=document.getElementById("devAluno").value;
+            const resposta = await fetch("/devolucao", {
 
-    const resposta=await fetch("/devolucao",{
+                method: "POST",
 
-        method:"POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
 
-        headers:{
-            "Content-Type":"application/json"
-        },
+                body: JSON.stringify({
 
-        body:JSON.stringify({
+                    id: id,
 
-            id:id,
+                    aluno: aluno
 
-            disponibilidade:false,
+                })
 
-            aluno:aluno
+            });
 
-        })
+            const dados = await resposta.json();
 
-    });
+            document.getElementById("mensagem").innerText =
+                dados.mensagem || dados.erro;
 
-    const dados=await resposta.json();
+            listarLivros();
 
-    document.getElementById("mensagem").innerText=
-        dados.mensagem || dados.erro;
+        }
 
-    listarLivros();
+        listarLivros();
 
-}
-
-listarLivros();
-
-</script>
+    </script>
 
 </body>
+
 </html>
