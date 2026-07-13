@@ -75,7 +75,7 @@ app.post('/login', (req, res) => {
             return res.status(200).json({ mensagem: 'Login realizado com sucesso!' });
         }
     }
-    if (!usuarioAutenticado) res.status(401).json({ erro: 'Usuário ou senha incorretos.' });
+    res.status(401).json({ erro: 'Usuário ou senha incorretos.' });
 });
 
 function buscarLivro(id) {
@@ -148,7 +148,7 @@ app.post('/devolucao', (req, res) => {
     }
 
     livro.disponibilidade = true;
-    res.status(201).json({
+    res.status(200).json({
         mensagem: 'Devolução do livro ' + livro.nome + ' feita por ' + aluno,
         livro: livro.nome,
     });
