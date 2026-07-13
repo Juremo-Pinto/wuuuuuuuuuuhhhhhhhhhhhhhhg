@@ -1,78 +1,190 @@
-# Contrato da API
+# Biblioteca Online - ETEFMC
 
-**Trio:** Fred, Brayan  
-**Tema:** Biblioteca Online para a ETEFMC
+Sistema web para gerenciamento de catálogo e empréstimos de livros da biblioteca da ETEFMC.
 
-| Método | Endpoint | Entrada | Resposta | Status |
-| ------ | -------- | ------- | -------- | ------ |
-| GET | `/` | — | Página HTML da aplicação | 200 |
-| GET | `/livros` | `genero` (query URL, opcional), `nome` (query URL, opcional) | Lista de livros em JSON filtrada | 200 |
-| POST | `/login` | `usuario`, `senha` (body JSON) | Confirmação de login ou mensagem de erro | 200 / 401 |
-| POST | `/livros` | `nome`, `genero` (body JSON) | Confirmação do cadastro e dados do livro criado | 201 / 400 / 401 |
-| DELETE | `/livros/:id` | `id` (parâmetro da URL) | Confirmação da exclusão ou mensagem de erro | 200 / 400 / 401 / 404 |
-| POST | `/emprestimo` | `id`, `aluno` (body JSON) | Confirmação do empréstimo ou mensagem de erro | 201 / 400 / 401 / 404 |
-| POST | `/devolucao` | `id`, `aluno` (body JSON) | Confirmação da devolução ou mensagem de erro | 201 / 400 / 401 / 404 |
+A aplicação permite visualizar livros disponíveis, pesquisar por título e gênero, registrar empréstimos e devoluções, adicionar novos livros e remover livros existentes. O sistema possui autenticação básica para restringir operações administrativas.
+
+## Funcionalidades
+
+### Catálogo
+
+- Visualização dos livros cadastrados.
+- Pesquisa por nome do livro.
+- Filtro por gênero.
+- Ordenação automática:
+  - Livros disponíveis aparecem primeiro.
+  - Livros são organizados em ordem alfabética.
+
+### Gerenciamento de empréstimos
+
+- Registro de empréstimos de livros.
+- Registro de devoluções.
+- Associação do livro com o aluno responsável.
+- Bloqueio de empréstimo de livros já emprestados.
+- Bloqueio de devolução feita por aluno diferente do responsável pelo empréstimo.
+
+### Administração
+
+- Login de usuário.
+- Cadastro de novos livros.
+- Exclusão de livros.
+- Validação de permissões para operações administrativas.
+
+### Interface
+
+- Design responsivo.
+- Tema claro e escuro.
+- Persistência da escolha de tema utilizando `localStorage`.
+- Sistema de notificações utilizando mensagens temporárias.
+- Tabela de livros com rolagem independente.
 
 ---
 
-## Estrutura do objeto Livro
+# Tecnologias utilizadas
 
-```json
+## Front-end
+
+- HTML5
+- CSS3
+- JavaScript
+- Fetch API
+
+## Back-end
+
+- Node.js
+- Express.js
+
+## Armazenamento
+
+Atualmente os dados são mantidos em memória utilizando estruturas JavaScript.
+
+Os livros são armazenados em um vetor de objetos:
+
+```javascript
 {
-    "id": 1,
-    "nome": "Chainsaw Man - Vol. 2",
-    "genero": "manga",
-    "disponibilidade": true,
-    "aluno": "-"
+    id: 1,
+    nome: "Chainsaw Man - Vol. 2",
+    genero: "manga",
+    disponibilidade: true,
+    aluno: "-"
 }
+````
+
+---
+
+# Estrutura do projeto
+
+```
+Biblioteca-Online/
+│
+├── public/
+│   └── index.html
+│
+├── server.js
+│
+├── API.md
+│
+└── README.md
 ```
 
 ---
 
-## Exemplos de requisição
+# Instalação
 
-### Listar todos os livros
+## Pré-requisitos
 
-```http
-GET /livros
+É necessário possuir:
+
+* Node.js instalado.
+* NPM instalado.
+
+Verifique as versões:
+
+```bash
+node -v
+npm -v
 ```
 
-### Filtrar por gênero
+---
 
-```http
+## Instalar dependências
+
+Dentro da pasta do projeto:
+
+```bash
+npm install express
+```
+
+---
+
+# Executando o projeto
+
+Inicie o servidor:
+
+```bash
+node server.js
+```
+
+O sistema estará disponível em:
+
+```
+http://localhost:3001
+```
+
+---
+
+# Usuários cadastrados
+
+O sistema possui autenticação simples utilizando usuários armazenados no código.
+
+Usuários disponíveis:
+
+| Usuário      | Senha     |
+| ------------ | --------- |
+| admin        | etefmc123 |
+| daniel.mosca | 34ds      |
+
+---
+
+# API
+
+A documentação completa da API está disponível em:
+
+```
+API.md
+```
+
+## Endpoints principais
+
+| Método | Endpoint      | Descrição                |
+| ------ | ------------- | ------------------------ |
+| GET    | `/`           | Retorna a aplicação web  |
+| GET    | `/livros`     | Lista livros cadastrados |
+| POST   | `/login`      | Realiza autenticação     |
+| POST   | `/livros`     | Adiciona um livro        |
+| DELETE | `/livros/:id` | Remove um livro          |
+| POST   | `/emprestimo` | Registra empréstimo      |
+| POST   | `/devolucao`  | Registra devolução       |
+
+---
+
+# Exemplos de uso
+
+## Buscar livros de fantasia
+
+```
 GET /livros?genero=fantasia
 ```
 
-### Pesquisar por nome
+## Pesquisar livro pelo nome
 
-```http
+```
 GET /livros?nome=vento
 ```
 
-### Combinar filtros
+## Adicionar livro
 
-```http
-GET /livros?genero=fantasia&nome=vento
 ```
-
-### Login
-
-```http
-POST /login
-```
-
-Body:
-
-```json
-{
-    "usuario": "admin",
-    "senha": "etefmc123"
-}
-```
-
-### Cadastrar um livro
-
-```http
 POST /livros
 ```
 
@@ -85,15 +197,9 @@ Body:
 }
 ```
 
-### Excluir um livro
+## Registrar empréstimo
 
-```http
-DELETE /livros/25
 ```
-
-### Registrar um empréstimo
-
-```http
 POST /emprestimo
 ```
 
@@ -106,71 +212,71 @@ Body:
 }
 ```
 
-### Registrar uma devolução
+---
 
-```http
-POST /devolucao
+# Regras de negócio
+
+* Apenas usuários autenticados podem modificar o catálogo ou registrar empréstimos.
+* Livros emprestados não podem ser excluídos.
+* Um livro disponível não pode ser devolvido.
+* Um livro só pode ser devolvido pelo aluno registrado no empréstimo.
+* IDs de livros nunca são reutilizados após exclusão.
+* Livros adicionados recebem o maior ID existente + 1.
+
+---
+
+# Decisões de projeto
+
+## Uso de vetor em memória
+
+Os dados foram mantidos em arrays JavaScript para simplificar a implementação inicial da aplicação.
+
+Em uma versão futura, o armazenamento pode ser migrado para um banco de dados como:
+
+* PostgreSQL
+* MySQL
+* MongoDB
+
+## Uso de JSON
+
+As requisições que alteram dados utilizam JSON no corpo da requisição, enquanto filtros públicos utilizam parâmetros de URL.
+
+Exemplo:
+
+Filtros:
+
+```
+GET /livros?genero=fantasia
 ```
 
-Body:
+Dados de criação:
 
 ```json
 {
-    "id": 5,
-    "aluno": "João"
+    "nome": "Duna",
+    "genero": "ficcao"
 }
 ```
 
 ---
 
-## Decisões de projeto
+# Melhorias futuras
 
-- **`genero` e `nome` são enviados pela query URL**, pois representam filtros públicos de pesquisa.
-- **`usuario` e `senha` são enviados no body JSON**, por serem informações de autenticação.
-- **`nome` e `genero` são enviados no body JSON** para cadastrar novos livros.
-- **`id` é enviado como parâmetro da URL** na exclusão de livros, pois identifica diretamente o recurso que será removido.
-- **`id` e `aluno` são enviados no body JSON** nas operações de empréstimo e devolução.
-- Os livros são armazenados em memória utilizando um vetor de objetos JavaScript.
-- O catálogo pode ser filtrado simultaneamente por gênero e por nome.
-- Os livros são exibidos no frontend ordenados por disponibilidade e, em seguida, por ordem alfabética.
-- Os identificadores (`id`) dos livros são incrementais e **não são reutilizados** quando um livro é removido.
+Possíveis melhorias para versões futuras:
+
+* Utilização de banco de dados persistente.
+* Sistema de sessão utilizando JWT.
+* Criptografia de senhas.
+* Cadastro de múltiplos usuários.
+* Histórico de empréstimos.
+* Controle de permissões por nível de usuário.
+* Interface de administração separada.
+* Upload de capas dos livros.
 
 ---
 
-## Códigos de resposta
+# Autores
 
-### `GET /livros`
+Projeto desenvolvido para a ETEFMC.
 
-- **200** – Lista retornada com sucesso.
-
-### `POST /login`
-
-- **200** – Login realizado com sucesso.
-- **401** – Usuário ou senha incorretos.
-
-### `POST /livros`
-
-- **201** – Livro cadastrado com sucesso.
-- **400** – Nome ou gênero não informados.
-- **401** – Usuário não autenticado.
-
-### `DELETE /livros/:id`
-
-- **200** – Livro removido com sucesso.
-- **400** – Livro está emprestado e não pode ser removido.
-- **401** – Usuário não autenticado.
-- **404** – Livro não encontrado.
-
-### `POST /emprestimo`
-
-- **201** – Empréstimo registrado com sucesso.
-- **400** – Dados inválidos ou livro já emprestado.
-- **401** – Usuário não autenticado.
-- **404** – Livro não encontrado.
-
-### `POST /devolucao`
-
-- **201** – Devolução registrada com sucesso.
-- **400** – Dados inválidos, livro ainda não emprestado ou emprestado para outro aluno.
-- **401** – Usuário não autenticado.
-- **404** – Livro não encontrado.
+**Trio:** Fred, Livia
